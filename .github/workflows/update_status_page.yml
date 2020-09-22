@@ -62,6 +62,7 @@ jobs:
 
       - name: deploy
         shell: bash -l {0}
+        if: github.ref == 'refs/heads/master' && ! cancelled()
         run: |
           pushd cf-graph
           source activate run_env
@@ -74,6 +75,7 @@ jobs:
         env:
           PASSWORD: ${{ secrets.AUTOTICK_BOT_TOKEN }}
           RUN_ID: ${{ env.GITHUB_RUN_ID }}
+
 
       - name: trigger next job
         uses: benc-uk/workflow-dispatch@v1
