@@ -67,7 +67,7 @@ jobs:
           pushd cf-graph
           conda activate run_env
 
-          export CIRCLE_BUILD_URL="https://github.com/regro/autotick-bot/runs/${RUN_ID}?check_suite_focus=true"
+          export CIRCLE_BUILD_URL="https://github.com/regro/autotick-bot/actions/runs/${RUN_ID}"
           export CIRCLE_BUILD_NUM="actually-actions-${RUN_ID}"
           conda-forge-tick --run -1
 
