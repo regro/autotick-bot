@@ -37,7 +37,7 @@ jobs:
           pushd cf-scripts
           export GIT_FULL_HASH=$(git rev-parse HEAD)
           conda create -n run_env --quiet --file requirements/run
-          source activate run_env
+          conda activate run_env
           conda info
           conda config --show-sources
           conda list --show-channel-urls
@@ -53,7 +53,7 @@ jobs:
         shell: bash -l {0}
         run: |
           pushd cf-graph
-          source activate run_env
+          conda activate run_env
 
           conda-forge-tick --run 4
           popd
@@ -65,7 +65,7 @@ jobs:
         if: github.ref == 'refs/heads/master' && ! cancelled()
         run: |
           pushd cf-graph
-          source activate run_env
+          conda activate run_env
 
           export CIRCLE_BUILD_URL="https://github.com/regro/repodata/runs/${RUN_ID}?check_suite_focus=true"
           export CIRCLE_BUILD_NUM="actually-actions-${RUN_ID}"
