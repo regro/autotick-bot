@@ -13,6 +13,12 @@ jobs:
     name: update-status-page
     runs-on: "ubuntu-latest"
     steps:
+      - name: skip me
+        shell: bash -l {0}
+        if: "contains(github.event.head_commit.message, 'ci skip')"
+        run: |
+          exit 1
+        
       - uses: actions/checkout@v2
 
       - uses: goanpeca/setup-miniconda@v1
@@ -62,7 +68,7 @@ jobs:
 
       - name: deploy
         shell: bash -l {0}
-        if: github.ref == 'refs/heads/master' && ! cancelled()
+        if: github.ref == 'refs/heads/master' && ! cancelled() && ! contains(github.event.head_commit.message, 'ci skip')
         run: |
           pushd cf-graph
           conda activate run_env
@@ -81,4 +87,4 @@ jobs:
         with:
           workflow: update-status-page
           token: ${{ secrets.AUTOTICK_BOT_TOKEN }}
-        if: github.ref == 'refs/heads/master' && ! cancelled()
+        if: github.ref == 'refs/heads/master' && ! cancelled() && ! contains(github.event.head_commit.message, 'ci skip')
