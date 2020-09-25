@@ -17,7 +17,7 @@ def pushd(new_dir):
 
 with tempfile.TemporaryDirectory() as tmpdir, pushd(tmpdir):
     subprocess.run(
-        ["git", "clone", "--depth=1", "https://github.com/regro/autotick-bot.git"],
+        ["git", "clone", "--depth=1", "https://github.com/regro/circle_worker.git"],
         check=True
     )
 
