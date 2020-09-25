@@ -1,0 +1,60 @@
+name: update-status-page
+
+on:
+  pull_request:
+    types: ['opened', 'synchronize', 'reopened']
+  push:
+    branches:
+      - master
+  workflow_dispatch: null
+
+jobs:
+  update_shards:
+    name: update-status-page
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: skip me
+        shell: bash -l {0}
+        if: "contains(github.event.head_commit.message, 'ci skip')"
+        run: |
+          echo "::set-env name=CI_SKIP::true"
+
+      - uses: actions/checkout@v2
+        if: sources() && ! env.CI_SKIP
+
+      - uses: goanpeca/setup-miniconda@v1
+        if: sources() && ! env.CI_SKIP
+        with:
+          python-version: 3.7
+          channels: conda-forge,defaults
+          channel-priority: strict
+          show-channel-urls: true
+
+
+      - name: install bot code
+        shell: bash -l {0}
+        if: sources() && ! env.CI_SKIP
+        run: |
+          git config --global user.name regro-cf-autotick-bot
+          git config --global user.email 36490558+regro-cf-autotick-bot@users.noreply.github.com
+          git config --global pull.rebase false
+
+          export START_TIME=$(date +%s)
+          export TIMEOUT=7200
+
+          git clone --depth=1 https://github.com/regro/cf-scripts.git
+
+          pushd cf-scripts
+          export GIT_FULL_HASH=$(git rev-parse HEAD)
+          conda create -n run_env --quiet --file requirements/run
+          conda activate run_env
+          conda info
+          conda config --show-sources
+          conda list --show-channel-urls
+          python setup.py develop
+          popd
+
+          git clone --depth=1 https://github.com/regro/cf-graph-countyfair.git cf-graph
+          git clone --depth=1 https://github.com/conda-forge/conda-forge-pinning-feedstock.git
+        env:
+          PASSWORD: ${{ secrets.AUTOTICK_BOT_TOKEN }}
