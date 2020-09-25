@@ -13,7 +13,7 @@ jobs:
         shell: bash -l {0}
         if: success() && contains(github.event.head_commit.message, 'ci skip')
         run: |
-          echo "commit message: ${MSG}"
+          echo "commit message: '${MSG}'"
           echo "::set-env name=CI_SKIP::true"
         env:
           MSG: ${{ github.event.head_commit.message }}
@@ -29,31 +29,18 @@ jobs:
           channel-priority: strict
           show-channel-urls: true
 
+      - name: do local setup and stop me if needed
+        shell: bash -l {0}
+        if: success() && ! env.CI_SKIP
+        run: |
+          source local_setup.sh
+          python stop_me_if_needed.py
+
       - name: install bot code
         shell: bash -l {0}
         if: success() && ! env.CI_SKIP
         run: |
-          git config --global user.name regro-cf-autotick-bot
-          git config --global user.email 36490558+regro-cf-autotick-bot@users.noreply.github.com
-          git config --global pull.rebase false
-
-          export START_TIME=$(date +%s)
-          export TIMEOUT=7200
-
-          git clone --depth=1 https://github.com/regro/cf-scripts.git
-
-          pushd cf-scripts
-          export GIT_FULL_HASH=$(git rev-parse HEAD)
-          conda create -n run_env --quiet --file requirements/run
-          conda activate run_env
-          conda info
-          conda config --show-sources
-          conda list --show-channel-urls
-          python setup.py develop
-          popd
-
-          git clone --depth=1 https://github.com/regro/cf-graph-countyfair.git cf-graph
-          git clone --depth=1 https://github.com/conda-forge/conda-forge-pinning-feedstock.git
+          source install_bot_code.sh
         env:
           PASSWORD: ${{ secrets.AUTOTICK_BOT_TOKEN }}
 
