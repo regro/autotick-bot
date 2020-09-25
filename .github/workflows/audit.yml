@@ -20,7 +20,8 @@ jobs:
           echo "msg: ${MSG}"
           echo "::set-env name=CI_SKIP::true"
         env:
-          MSG: ${{ github.event.head_commit.message }}
+          # MSG: ${{ github.event.head_commit.message }}
+          MSG: ${{ github.event.commits[0].message }}
 
       - uses: actions/checkout@v2
         if: success() && ! env.CI_SKIP
