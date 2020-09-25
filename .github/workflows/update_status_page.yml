@@ -1,11 +1,7 @@
 name: update-status-page
 
 on:
-  # pull_request:
-  #   types: ['opened', 'synchronize', 'reopened']
-  push:
-    branches:
-      - master
+  # push: null
   workflow_dispatch: null
 
 jobs:
@@ -15,13 +11,18 @@ jobs:
     steps:
       - name: skip me
         shell: bash -l {0}
-        if: "contains(github.event.head_commit.message, 'ci skip')"
+        if: success() && contains(github.event.head_commit.message, 'ci skip')
         run: |
-          exit 1
+          echo "commit message: ${MSG}"
+          echo "::set-env name=CI_SKIP::true"
+        env:
+          MSG: ${{ github.event.head_commit.message }}
 
       - uses: actions/checkout@v2
+        if: success() && ! env.CI_SKIP
 
       - uses: goanpeca/setup-miniconda@v1
+        if: success() && ! env.CI_SKIP
         with:
           python-version: 3.7
           channels: conda-forge,defaults
@@ -30,6 +31,7 @@ jobs:
 
       - name: install bot code
         shell: bash -l {0}
+        if: success() && ! env.CI_SKIP
         run: |
           git config --global user.name regro-cf-autotick-bot
           git config --global user.email 36490558+regro-cf-autotick-bot@users.noreply.github.com
@@ -57,6 +59,7 @@ jobs:
 
       - name: update status page
         shell: bash -l {0}
+        if: success() && ! env.CI_SKIP
         run: |
           pushd cf-graph
           conda activate run_env
@@ -68,7 +71,7 @@ jobs:
 
       - name: deploy
         shell: bash -l {0}
-        if: github.ref == 'refs/heads/master' && ! cancelled() && ! contains(github.event.head_commit.message, 'ci skip')
+        if: github.ref == 'refs/heads/master' && ! cancelled() && ! env.CI_SKIP
         run: |
           pushd cf-graph
           conda activate run_env
@@ -84,7 +87,7 @@ jobs:
 
       - name: trigger next job
         uses: benc-uk/workflow-dispatch@v1
+        if: github.ref == 'refs/heads/master' && ! cancelled() && ! env.CI_SKIP
         with:
           workflow: update-status-page
           token: ${{ secrets.AUTOTICK_BOT_TOKEN }}
-        if: github.ref == 'refs/heads/master' && ! cancelled() && ! contains(github.event.head_commit.message, 'ci skip')

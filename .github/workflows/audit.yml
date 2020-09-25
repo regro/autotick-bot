@@ -1,12 +1,7 @@
 name: audit
 
 on:
-  # pull_request:
-  #   types: ['opened', 'synchronize', 'reopened']
   push: null
-    # branches:
-    #   - *
-    #   # - master
   workflow_dispatch: null
 
 jobs:
@@ -16,14 +11,12 @@ jobs:
     steps:
       - name: skip me
         shell: bash -l {0}
-        # if: success() # && contains(github.event.head_commit.message, 'ci skip')
+        if: success() && contains(github.event.head_commit.message, 'ci skip')
         run: |
-          echo "msg: ${MSG}"
+          echo "commit message: '${MSG}'"
           echo "::set-env name=CI_SKIP::true"
-          python -c "import os, json, pprint; pprint.pprint(json.load(open(os.environ['GITHUB_EVENT_PATH'])))"
         env:
           MSG: ${{ github.event.head_commit.message }}
-          # MSG: ${{ github.event.commits[0].message }}
 
       - uses: actions/checkout@v2
         if: success() && ! env.CI_SKIP
