@@ -1,5 +1,4 @@
 import os
-import sys
 import tempfile
 import subprocess
 import contextlib
@@ -30,4 +29,3 @@ with tempfile.TemporaryDirectory() as tmpdir, pushd(tmpdir):
 if not go:
     print("I could not find the file 'please.go' on master! Stopping!")
     print("::set-env name=CI_SKIP::true", flush=True)
-    # sys.exit(1)
