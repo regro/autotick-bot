@@ -1,11 +1,12 @@
 name: audit
 
 on:
-  pull_request:
-    types: ['opened', 'synchronize', 'reopened']
+  # pull_request:
+  #   types: ['opened', 'synchronize', 'reopened']
   push:
     branches:
-      - master
+      - *
+      # - master
   workflow_dispatch: null
 
 jobs:
@@ -19,7 +20,7 @@ jobs:
         run: |
           echo "msg: ${MSG}"
           echo "::set-env name=CI_SKIP::true"
-          python -c "import os, json; print(json.load(open(os.environ['GITHUB_EVENT_PATH'])))"
+          python -c "import os, json, pprint; pprint.pprint(json.load(open(os.environ['GITHUB_EVENT_PATH'])))"
         env:
           MSG: ${{ github.event.head_commit.message }}
           # MSG: ${{ github.event.commits[0].message }}
