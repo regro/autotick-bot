@@ -1,7 +1,7 @@
 name: update-status-page
 
 on:
-  # push: null
+  push: null
   workflow_dispatch: null
 
 jobs:
