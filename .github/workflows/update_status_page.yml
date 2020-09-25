@@ -1,7 +1,9 @@
 name: update-status-page
 
 on:
-  push: null
+  push:
+    branhes:
+      - master
   workflow_dispatch: null
 
 jobs:
