@@ -81,7 +81,7 @@ jobs:
 
       - name: bump on fail
         shell: bash -l {0}
-        if: failure() && ! env.CI_SKIP
+        if: github.ref == 'refs/heads/master' && failure() && ! env.CI_SKIP
         run: |
           export ACTION_URL="https://github.com/regro/autotick-bot/actions/runs/${RUN_ID}"
           python bump_bot_team.py
