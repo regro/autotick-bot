@@ -20,10 +20,10 @@ jobs:
           echo "::set-env name=CI_SKIP::true"
 
       - uses: actions/checkout@v2
-        if: sources() && ! env.CI_SKIP
+        if: success() && ! env.CI_SKIP
 
       - uses: goanpeca/setup-miniconda@v1
-        if: sources() && ! env.CI_SKIP
+        if: success() && ! env.CI_SKIP
         with:
           python-version: 3.7
           channels: conda-forge,defaults
@@ -33,7 +33,7 @@ jobs:
 
       - name: install bot code
         shell: bash -l {0}
-        if: sources() && ! env.CI_SKIP
+        if: success() && ! env.CI_SKIP
         run: |
           git config --global user.name regro-cf-autotick-bot
           git config --global user.email 36490558+regro-cf-autotick-bot@users.noreply.github.com
