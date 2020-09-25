@@ -15,9 +15,12 @@ jobs:
     steps:
       - name: skip me
         shell: bash -l {0}
-        if: success() && contains(github.event.head_commit.message, 'ci skip')
+        # if: success() # && contains(github.event.head_commit.message, 'ci skip')
         run: |
+          echo "msg: ${MSG}"
           echo "::set-env name=CI_SKIP::true"
+        env:
+          MSG: ${{ github.event.head_commit.message }}
 
       - uses: actions/checkout@v2
         if: success() && ! env.CI_SKIP
