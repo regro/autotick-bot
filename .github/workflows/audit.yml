@@ -19,9 +19,10 @@ jobs:
         run: |
           echo "msg: ${MSG}"
           echo "::set-env name=CI_SKIP::true"
+          python -c "import os, json; print(json.load(open(os.environ['GITHUB_EVENT'])))"
         env:
-          # MSG: ${{ github.event.head_commit.message }}
-          MSG: ${{ github.event.commits[0].message }}
+          MSG: ${{ github.event.head_commit.message }}
+          # MSG: ${{ github.event.commits[0].message }}
 
       - uses: actions/checkout@v2
         if: success() && ! env.CI_SKIP
