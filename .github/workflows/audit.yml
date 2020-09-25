@@ -3,10 +3,10 @@ name: audit
 on:
   # pull_request:
   #   types: ['opened', 'synchronize', 'reopened']
-  push:
-    branches:
-      - *
-      # - master
+  push: null
+    # branches:
+    #   - *
+    #   # - master
   workflow_dispatch: null
 
 jobs:
