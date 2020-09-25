@@ -1,4 +1,4 @@
-name: update-status-page
+name: audit
 
 on:
   pull_request:
@@ -10,7 +10,7 @@ on:
 
 jobs:
   update_shards:
-    name: update-status-page
+    name: audit
     runs-on: "ubuntu-latest"
     steps:
       - name: skip me
