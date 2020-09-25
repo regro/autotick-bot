@@ -1,8 +1,8 @@
 name: update-status-page
 
 on:
-  pull_request:
-    types: ['opened', 'synchronize', 'reopened']
+  # pull_request:
+  #   types: ['opened', 'synchronize', 'reopened']
   push:
     branches:
       - master
@@ -18,7 +18,7 @@ jobs:
         if: "contains(github.event.head_commit.message, 'ci skip')"
         run: |
           exit 1
-        
+
       - uses: actions/checkout@v2
 
       - uses: goanpeca/setup-miniconda@v1
