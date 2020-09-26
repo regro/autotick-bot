@@ -1,12 +1,12 @@
-name: update-status-page
+name: pacemaker
 
 on:
   schedule:
-    - cron: '0,15,30,45 * * * *'
+    - cron: '0,30 * * * *'
 
 jobs:
-  update_status_page:
-    name: update-status-page
+  pacemaker:
+    name: pacemaker
     runs-on: "ubuntu-latest"
     steps:
       - name: skip me
@@ -36,41 +36,26 @@ jobs:
           source local_setup.sh
           python stop_me_if_needed.py
 
-      - name: install bot code
+      - name: check heartbeats
         shell: bash -l {0}
         if: success() && ! env.CI_SKIP
         run: |
-          source install_bot_code.sh
-        env:
-          PASSWORD: ${{ secrets.AUTOTICK_BOT_TOKEN }}
+          python check_heartbeats.py bot
+          python check_heartbeats.py prs
 
-      - name: update status page
-        shell: bash -l {0}
-        if: success() && ! env.CI_SKIP
-        run: |
-          pushd cf-graph
-          conda activate run_env
+      - name: trigger bot if needed
+        uses: benc-uk/workflow-dispatch@v1
+        if: github.ref == 'refs/heads/master' && ! cancelled() && ! failure() && ! env.CI_SKIP && env.TRIGGER_BOT
+        with:
+          workflow: bot
+          token: ${{ secrets.AUTOTICK_BOT_TOKEN }}
 
-          conda-forge-tick --run 4
-          popd
-        env:
-          PASSWORD: ${{ secrets.AUTOTICK_BOT_TOKEN }}
-
-      - name: deploy
-        shell: bash -l {0}
-        if: github.ref == 'refs/heads/master' && ! cancelled() && ! env.CI_SKIP
-        run: |
-          pushd cf-graph
-          conda activate run_env
-
-          export CIRCLE_BUILD_URL="https://github.com/regro/autotick-bot/actions/runs/${RUN_ID}"
-          export CIRCLE_BUILD_NUM="actually-actions-${RUN_ID}"
-          conda-forge-tick --run -1
-
-          popd
-        env:
-          PASSWORD: ${{ secrets.AUTOTICK_BOT_TOKEN }}
-          RUN_ID: ${{ github.run_id }}
+      - name: trigger prs if needed
+        uses: benc-uk/workflow-dispatch@v1
+        if: github.ref == 'refs/heads/master' && ! cancelled() && ! failure() && ! env.CI_SKIP && env.TRIGGER_PRS
+        with:
+          workflow: prs
+          token: ${{ secrets.AUTOTICK_BOT_TOKEN }}
 
       - name: bump on fail
         shell: bash -l {0}

@@ -1,12 +1,11 @@
-name: update-status-page
+name: prs
 
 on:
-  schedule:
-    - cron: '0,15,30,45 * * * *'
+  workflow_dispatch: null
 
 jobs:
-  update_status_page:
-    name: update-status-page
+  prs:
+    name: prs
     runs-on: "ubuntu-latest"
     steps:
       - name: skip me
@@ -36,6 +35,14 @@ jobs:
           source local_setup.sh
           python stop_me_if_needed.py
 
+      - name: write heartbeat
+        shell: bash -l {0}
+        if: success() && ! env.CI_SKIP
+        run: |
+          python write_heartbeat.py ${ACTION_NAME}
+        env:
+          ACTION_NAME: ${{ github.workflow }}
+
       - name: install bot code
         shell: bash -l {0}
         if: success() && ! env.CI_SKIP
@@ -44,14 +51,14 @@ jobs:
         env:
           PASSWORD: ${{ secrets.AUTOTICK_BOT_TOKEN }}
 
-      - name: update status page
+      - name: update prs
         shell: bash -l {0}
         if: success() && ! env.CI_SKIP
         run: |
           pushd cf-graph
           conda activate run_env
 
-          conda-forge-tick --run 4
+          conda-forge-tick --run 6
           popd
         env:
           PASSWORD: ${{ secrets.AUTOTICK_BOT_TOKEN }}
@@ -71,6 +78,13 @@ jobs:
         env:
           PASSWORD: ${{ secrets.AUTOTICK_BOT_TOKEN }}
           RUN_ID: ${{ github.run_id }}
+
+      - name: trigger next job
+        uses: benc-uk/workflow-dispatch@v1
+        if: github.ref == 'refs/heads/master' && ! cancelled() && ! failure() && ! env.CI_SKIP
+        with:
+          workflow: prs
+          token: ${{ secrets.AUTOTICK_BOT_TOKEN }}
 
       - name: bump on fail
         shell: bash -l {0}
