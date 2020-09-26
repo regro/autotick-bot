@@ -41,7 +41,7 @@ jobs:
         run: |
           python write_heartbeat.py ${ACTION_NAME}
         env:
-          PASSWORD: ${{ secrets.AUTOTICK_BOT_TOKEN }}          
+          PASSWORD: ${{ secrets.AUTOTICK_BOT_TOKEN }}
           ACTION_NAME: ${{ github.workflow }}
 
       - name: install bot code
@@ -62,6 +62,7 @@ jobs:
           conda-forge-tick --run 6
           popd
         env:
+          USERNAME: regro-cf-autotick-bot
           PASSWORD: ${{ secrets.AUTOTICK_BOT_TOKEN }}
 
       - name: deploy
