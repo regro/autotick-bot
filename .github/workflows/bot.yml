@@ -41,6 +41,7 @@ jobs:
         run: |
           python write_heartbeat.py ${ACTION_NAME}
         env:
+          PASSWORD: ${{ secrets.AUTOTICK_BOT_TOKEN }}          
           ACTION_NAME: ${{ github.workflow }}
 
       - name: install bot code

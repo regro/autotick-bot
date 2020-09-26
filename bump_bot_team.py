@@ -20,7 +20,7 @@ Have a great day!
 
 job url: %s
 
-""" % (sys.argv[1], os.environ["ACTION_URL"])
+""" % (os.environ["ACTION_NAME"], os.environ["ACTION_URL"])
 )
 
 sys.exit(1)
