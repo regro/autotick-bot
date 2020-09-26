@@ -1,5 +1,5 @@
 # autotick-bot
-![update-status-page](https://github.com/regro/autotick-bot/workflows/update-status-page/badge.svg) ![audit](https://github.com/regro/autotick-bot/workflows/audit/badge.svg) ![pypi-mapping](https://github.com/regro/autotick-bot/workflows/pypi-mapping/badge.svg) ![versions](https://github.com/regro/autotick-bot/workflows/versions/badge.svg)
+![update-status-page](https://github.com/regro/autotick-bot/workflows/update-status-page/badge.svg) ![audit](https://github.com/regro/autotick-bot/workflows/audit/badge.svg) ![pypi-mapping](https://github.com/regro/autotick-bot/workflows/pypi-mapping/badge.svg) ![versions](https://github.com/regro/autotick-bot/workflows/versions/badge.svg) ![prs](https://github.com/regro/autotick-bot/workflows/prs/badge.svg) ![bot](https://github.com/regro/autotick-bot/workflows/bot/badge.svg) ![pacemaker](https://github.com/regro/autotick-bot/workflows/pacemaker/badge.svg)
 
 the actual bot in an actual place doing an actual thing
 
