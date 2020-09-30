@@ -88,8 +88,16 @@ jobs:
           conda-forge-tick --run 3
           popd
         env:
-          USERNAME: regro-cf-autotick-bot          
+          USERNAME: regro-cf-autotick-bot
           PASSWORD: ${{ secrets.AUTOTICK_BOT_TOKEN }}
+
+      - name: status of changes
+        shell: bash -l {0}
+        if: github.ref == 'refs/heads/master' && ! cancelled() && ! env.CI_SKIP
+        run: |
+          pushd cf-graph
+          git status
+          popd
 
       - name: deploy
         shell: bash -l {0}
