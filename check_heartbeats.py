@@ -58,4 +58,4 @@ if not go:
     )
 else:
     print("Starting the next worker...")
-    print("::set-env name=TRIGGER_%s::true" % sys.argv[1].uppaer(), flush=True)
+    print("::set-env name=TRIGGER_%s::true" % sys.argv[1].upper(), flush=True)
