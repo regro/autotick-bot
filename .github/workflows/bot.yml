@@ -82,6 +82,9 @@ jobs:
         shell: bash -l {0}
         if: success() && ! env.CI_SKIP
         run: |
+          export START_TIME=$(date +%s)
+          export TIMEOUT=7200          
+          
           pushd cf-graph
           conda activate run_env
 
