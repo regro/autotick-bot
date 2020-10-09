@@ -9,6 +9,7 @@ pushd cf-scripts
 export GIT_FULL_HASH=$(git rev-parse HEAD)
 conda create -n run_env --quiet --file requirements/run
 conda activate run_env
+conda config --env --set add_pip_as_python_dependency False
 conda info
 conda config --show-sources
 conda list --show-channel-urls
