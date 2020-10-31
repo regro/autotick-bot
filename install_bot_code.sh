@@ -18,4 +18,3 @@ popd
 
 git clone --depth=100 https://github.com/regro/cf-graph-countyfair.git cf-graph
 git clone --depth=1 https://github.com/conda-forge/conda-forge-pinning-feedstock.git
-git clone --depth=1 https://github.com/regro/libcfgraph.git
