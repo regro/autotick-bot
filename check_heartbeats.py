@@ -6,7 +6,7 @@ import contextlib
 import json
 import time
 
-THREEHOURS = 3 * 60 * 60
+THREEHOURS = 6 * 60 * 60
 
 
 # https://stackoverflow.com/questions/6194499/pushd-through-os-system
