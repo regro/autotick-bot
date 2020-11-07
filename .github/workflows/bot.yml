@@ -81,9 +81,12 @@ jobs:
       - name: run migrations
         shell: bash -l {0}
         if: success() && ! env.CI_SKIP
+        timeout-minutes: 210
         run: |
           export START_TIME=$(date +%s)
-          export TIMEOUT=7200          
+          export TIMEOUT=7200
+          export CIRCLE_BUILD_URL="https://github.com/regro/autotick-bot/actions/runs/${RUN_ID}"
+          export CIRCLE_BUILD_NUM="actually-actions-${RUN_ID}"
           
           pushd cf-graph
           conda activate run_env
@@ -93,10 +96,11 @@ jobs:
         env:
           USERNAME: regro-cf-autotick-bot
           PASSWORD: ${{ secrets.AUTOTICK_BOT_TOKEN }}
+          RUN_ID: ${{ github.run_id }}
 
       - name: status of changes
         shell: bash -l {0}
-        if: github.ref == 'refs/heads/master' && ! cancelled() && ! env.CI_SKIP
+        if: github.ref == 'refs/heads/master' && always() && ! env.CI_SKIP
         run: |
           pushd cf-graph
           git status
@@ -104,7 +108,7 @@ jobs:
 
       - name: deploy
         shell: bash -l {0}
-        if: github.ref == 'refs/heads/master' && ! cancelled() && ! env.CI_SKIP
+        if: github.ref == 'refs/heads/master' && always() && ! env.CI_SKIP
         run: |
           pushd cf-graph
           conda activate run_env
