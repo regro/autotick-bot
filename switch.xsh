@@ -6,5 +6,5 @@ else:
     mv please.stop
     git add please.go
     s = 'let it go, let it gooooo'
-git commit -am @(f"[CI SKIP] {s}")
+git commit -am @(f"{s}")
 git push
