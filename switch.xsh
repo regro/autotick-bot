@@ -1,7 +1,7 @@
 if 'please.go' in @(ls):
     mv please.go please.stop
     git add please.stop
-    s = 'stop in the name of bot'
+    s = '[ci skip] stop in the name of bot'
 else:
     mv please.stop
     git add please.go
