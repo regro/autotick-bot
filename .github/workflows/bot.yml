@@ -8,7 +8,7 @@ jobs:
     name: bot
     runs-on: "ubuntu-latest"
     env:
-      BOT_CLI_ARGS: "--dry-run"
+      BOT_CLI_ARGS: ""
     steps:
       - name: skip me
         shell: bash -l {0}
