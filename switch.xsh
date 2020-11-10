@@ -1,3 +1,5 @@
+#!/usr/bin/env xonsh
+
 if 'please.go' in @(ls):
     mv please.go please.stop
     git add please.stop
