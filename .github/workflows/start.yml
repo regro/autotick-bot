@@ -15,14 +15,14 @@ jobs:
         if: success() && contains(github.event.head_commit.message, 'ci skip')
         run: |
           echo "commit message: '${MSG}'"
-          echo "::set-env name=CI_SKIP::true"
+          echo "CI_SKIP=true" >> $GITHUB_ENV
         env:
           MSG: ${{ github.event.head_commit.message }}
 
       - uses: actions/checkout@v2
         if: success() && ! env.CI_SKIP
 
-      - uses: goanpeca/setup-miniconda@v1
+      - uses: conda-incubator/setup-miniconda@v2
         if: success() && ! env.CI_SKIP
         with:
           python-version: 3.7
