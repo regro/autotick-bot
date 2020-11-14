@@ -58,4 +58,7 @@ if not go:
     )
 else:
     print("Starting the next worker...")
-    print("::set-env name=TRIGGER_%s::true" % sys.argv[1].upper(), flush=True)
+    subprocess.run(
+        "echo \"TRIGGER_%s=true\" >> $GITHUB_ENV" % sys.argv[1].upper(),
+        shell=True,
+    )
