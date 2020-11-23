@@ -1,8 +1,8 @@
 name: audit
 
-on:
-  schedule:
-    - cron:  '42 * * * *'
+# on:
+#   schedule:
+#     - cron:  '42 * * * *'
 
 jobs:
   audit:
