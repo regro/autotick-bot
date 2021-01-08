@@ -51,6 +51,13 @@ jobs:
           workflow: prs
           token: ${{ secrets.AUTOTICK_BOT_TOKEN }}
 
+      - name: trigger status page
+        uses: benc-uk/workflow-dispatch@v1
+        if: github.ref == 'refs/heads/master' && ! cancelled() && ! failure() && ! env.CI_SKIP
+        with:
+          workflow: update-status-page
+          token: ${{ secrets.AUTOTICK_BOT_TOKEN }}
+
       - name: bump on fail
         shell: bash -l {0}
         if: github.ref == 'refs/heads/master' && failure() && ! env.CI_SKIP
