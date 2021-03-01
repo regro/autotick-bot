@@ -19,6 +19,12 @@ jobs:
         env:
           MSG: ${{ github.event.head_commit.message }}
 
+      - name: gh workflow
+        shell: bash -l {0}
+        if: success() && ! env.CI_SKIP
+        run: |
+          echo "gh-workflow: '${GITHUB_WORKFLOW}'"
+
       - name: turnstyle
         id: turnstyle
         uses: softprops/turnstyle@v1
