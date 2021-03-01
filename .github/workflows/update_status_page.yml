@@ -33,7 +33,7 @@ jobs:
           continue-after-seconds: 10
           poll-interval-seconds: 5
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.AUTOTICK_BOT_TOKEN }}
 
       - name: force continue output
         shell: bash -l {0}
