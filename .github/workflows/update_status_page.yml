@@ -19,6 +19,9 @@ jobs:
         env:
           MSG: ${{ github.event.head_commit.message }}
 
+      - uses: actions/checkout@v2
+        if: success() && ! env.CI_SKIP
+
       - name: gh workflow
         shell: bash -l {0}
         if: success() && ! env.CI_SKIP
@@ -27,7 +30,7 @@ jobs:
 
       - name: turnstyle
         id: turnstyle
-        uses: softprops/turnstyle@v1
+        uses: ./turnstyle
         if: success() && ! env.CI_SKIP
         with:
           continue-after-seconds: 10
