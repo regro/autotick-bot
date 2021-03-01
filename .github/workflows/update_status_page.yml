@@ -29,6 +29,14 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: force continue output
+        shell: bash -l {0}
+        if: success() && ! env.CI_SKIP
+        run: |
+          echo "force-continue: '${FC}'"
+        env:
+          FC: ${{ steps.turnstyle.outputs.force_continued }}
+
       - uses: actions/checkout@v2
         if: success() && ! env.CI_SKIP && ! steps.turnstyle.outputs.force_continued
 
