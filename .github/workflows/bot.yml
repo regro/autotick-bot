@@ -54,19 +54,6 @@ jobs:
         env:
           PASSWORD: ${{ secrets.AUTOTICK_BOT_TOKEN }}
 
-      - name: collect feedstocks
-        shell: bash -l {0}
-        if: success() && ! env.CI_SKIP
-        run: |
-          pushd cf-graph
-          conda activate run_env
-
-          conda-forge-tick --run 0 ${BOT_CLI_ARGS}
-          popd
-        env:
-          USERNAME: regro-cf-autotick-bot
-          PASSWORD: ${{ secrets.AUTOTICK_BOT_TOKEN }}
-
       - name: make graph
         shell: bash -l {0}
         if: success() && ! env.CI_SKIP
