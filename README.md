@@ -4,8 +4,9 @@
 [![pypi-mapping](https://github.com/regro/autotick-bot/workflows/pypi-mapping/badge.svg)](https://github.com/regro/autotick-bot/actions?query=workflow%3Apypi-mapping)
 [![versions](https://github.com/regro/autotick-bot/workflows/versions/badge.svg)](https://github.com/regro/autotick-bot/actions?query=workflow%3Aversions)
 [![prs](https://github.com/regro/autotick-bot/workflows/prs/badge.svg)](https://github.com/regro/autotick-bot/actions?query=workflow%3Aprs)
-[![bot](https://github.com/regro/autotick-bot/workflows/bot/badge.svg)](https://github.com/regro/autotick-bot/actions?query=workflow%3Abot) 
+[![bot](https://github.com/regro/autotick-bot/workflows/bot/badge.svg)](https://github.com/regro/autotick-bot/actions?query=workflow%3Abot)
 [![pacemaker](https://github.com/regro/autotick-bot/workflows/pacemaker/badge.svg)](https://github.com/regro/autotick-bot/actions?query=workflow%3Apacemaker)
+[![pacemaker](https://github.com/regro/autotick-bot/workflows/feedstocks/badge.svg)](https://github.com/regro/autotick-bot/actions?query=workflow%3Afeedstocks)
 
 the actual bot in an actual place doing an actual thing
 
