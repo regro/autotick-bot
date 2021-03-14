@@ -47,7 +47,7 @@ jobs:
         if: success() && ! env.CI_SKIP && ! steps.turnstyle.outputs.force_continued
         run: |
           source local_setup.sh
-          python stop_me_if_needed.py
+          # python stop_me_if_needed.py
 
       - name: install bot code
         shell: bash -l {0}
