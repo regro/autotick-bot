@@ -85,16 +85,25 @@ jobs:
           PASSWORD: ${{ secrets.AUTOTICK_BOT_TOKEN }}
           RUN_ID: ${{ github.run_id }}
 
+      - name: turnstyle-python
+        id: turnstyle_again
+        uses: beckermr/turnstyle-python@v1
+        if: success() && ! env.CI_SKIP && ! steps.turnstyle.outputs.force_continued
+        with:
+          continue-after-seconds: 10
+          poll-interval-seconds: 5
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: trigger next job
         uses: benc-uk/workflow-dispatch@v1
-        if: github.ref == 'refs/heads/master' && ! cancelled() && ! failure() && ! env.CI_SKIP && ! steps.turnstyle.outputs.force_continued
+        if: github.ref == 'refs/heads/master' && ! cancelled() && ! failure() && ! env.CI_SKIP && ! steps.turnstyle.outputs.force_continued && ! steps.turnstyle_again.outputs.force_continued
         with:
           workflow: update-status-page
           token: ${{ secrets.AUTOTICK_BOT_TOKEN }}
 
       - name: bump on fail
         shell: bash -l {0}
-        if: github.ref == 'refs/heads/master' && failure() && ! env.CI_SKIP && ! steps.turnstyle.outputs.force_continued
+        if: github.ref == 'refs/heads/master' && failure() && ! env.CI_SKIP && ! steps.turnstyle.outputs.force_continued && ! steps.turnstyle_again.outputs.force_continued
         run: |
           export ACTION_URL="https://github.com/regro/autotick-bot/actions/runs/${RUN_ID}"
           python bump_bot_team.py
