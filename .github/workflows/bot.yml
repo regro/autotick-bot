@@ -10,20 +10,9 @@ jobs:
     env:
       BOT_CLI_ARGS: ""
     steps:
-      - name: skip me
-        shell: bash -l {0}
-        if: success() && contains(github.event.head_commit.message, 'ci skip')
-        run: |
-          echo "commit message: '${MSG}'"
-          echo "CI_SKIP=true" >> $GITHUB_ENV
-        env:
-          MSG: ${{ github.event.head_commit.message }}
-
       - uses: actions/checkout@v2
-        if: success() && ! env.CI_SKIP
 
       - uses: conda-incubator/setup-miniconda@v2
-        if: success() && ! env.CI_SKIP
         with:
           python-version: 3.7
           channels: conda-forge,defaults
@@ -32,14 +21,12 @@ jobs:
 
       - name: do local setup and stop me if needed
         shell: bash -l {0}
-        if: success() && ! env.CI_SKIP
         run: |
           source local_setup.sh
           python stop_me_if_needed.py
 
       - name: write heartbeat
         shell: bash -l {0}
-        if: success() && ! env.CI_SKIP
         run: |
           python write_heartbeat.py ${ACTION_NAME}
         env:
@@ -48,7 +35,6 @@ jobs:
 
       - name: install bot code
         shell: bash -l {0}
-        if: success() && ! env.CI_SKIP
         run: |
           source install_bot_code.sh
         env:
@@ -56,7 +42,6 @@ jobs:
 
       - name: make graph
         shell: bash -l {0}
-        if: success() && ! env.CI_SKIP
         run: |
           pushd cf-graph
           conda activate run_env
@@ -69,7 +54,6 @@ jobs:
 
       - name: run migrations
         shell: bash -l {0}
-        if: success() && ! env.CI_SKIP
         timeout-minutes: 210
         run: |
           export START_TIME=$(date +%s)
@@ -89,7 +73,7 @@ jobs:
 
       - name: status of changes
         shell: bash -l {0}
-        if: github.ref == 'refs/heads/master' && always() && ! env.CI_SKIP
+        if: github.ref == 'refs/heads/master' && always()
         run: |
           pushd cf-graph
           git status
@@ -97,7 +81,7 @@ jobs:
 
       - name: deploy
         shell: bash -l {0}
-        if: github.ref == 'refs/heads/master' && always() && ! env.CI_SKIP
+        if: github.ref == 'refs/heads/master' && always()
         run: |
           pushd cf-graph
           conda activate run_env
@@ -113,14 +97,14 @@ jobs:
 
       - name: trigger next job
         uses: benc-uk/workflow-dispatch@v1
-        if: github.ref == 'refs/heads/master' && ! cancelled() && ! failure() && ! env.CI_SKIP
+        if: github.ref == 'refs/heads/master' && ! cancelled() && ! failure()
         with:
           workflow: bot
           token: ${{ secrets.AUTOTICK_BOT_TOKEN }}
 
       - name: bump on fail
         shell: bash -l {0}
-        if: github.ref == 'refs/heads/master' && failure() && ! env.CI_SKIP
+        if: github.ref == 'refs/heads/master' && failure()
         run: |
           export ACTION_URL="https://github.com/regro/autotick-bot/actions/runs/${RUN_ID}"
           python bump_bot_team.py

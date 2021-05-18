@@ -9,20 +9,9 @@ jobs:
     name: pacemaker
     runs-on: "ubuntu-latest"
     steps:
-      - name: skip me
-        shell: bash -l {0}
-        if: success() && contains(github.event.head_commit.message, 'ci skip')
-        run: |
-          echo "commit message: '${MSG}'"
-          echo "CI_SKIP=true" >> $GITHUB_ENV
-        env:
-          MSG: ${{ github.event.head_commit.message }}
-
       - uses: actions/checkout@v2
-        if: success() && ! env.CI_SKIP
 
       - uses: conda-incubator/setup-miniconda@v2
-        if: success() && ! env.CI_SKIP
         with:
           python-version: 3.7
           channels: conda-forge,defaults
@@ -31,35 +20,33 @@ jobs:
 
       - name: do local setup and stop me if needed
         shell: bash -l {0}
-        if: success() && ! env.CI_SKIP
         run: |
           source local_setup.sh
           python stop_me_if_needed.py
 
       - name: check heartbeats
         shell: bash -l {0}
-        if: success() && ! env.CI_SKIP
         run: |
           python check_heartbeats.py bot
           python check_heartbeats.py prs
 
       - name: trigger bot if needed
         uses: benc-uk/workflow-dispatch@v1
-        if: github.ref == 'refs/heads/master' && ! cancelled() && ! failure() && ! env.CI_SKIP && env.TRIGGER_BOT
+        if: github.ref == 'refs/heads/master' && ! cancelled() && ! failure() && env.TRIGGER_BOT
         with:
           workflow: bot
           token: ${{ secrets.AUTOTICK_BOT_TOKEN }}
 
       - name: trigger prs if needed
         uses: benc-uk/workflow-dispatch@v1
-        if: github.ref == 'refs/heads/master' && ! cancelled() && ! failure() && ! env.CI_SKIP && env.TRIGGER_PRS
+        if: github.ref == 'refs/heads/master' && ! cancelled() && ! failure() && env.TRIGGER_PRS
         with:
           workflow: prs
           token: ${{ secrets.AUTOTICK_BOT_TOKEN }}
 
       - name: bump on fail
         shell: bash -l {0}
-        if: github.ref == 'refs/heads/master' && failure() && ! env.CI_SKIP
+        if: github.ref == 'refs/heads/master' && failure()
         run: |
           export ACTION_URL="https://github.com/regro/autotick-bot/actions/runs/${RUN_ID}"
           python bump_bot_team.py
