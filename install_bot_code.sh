@@ -7,8 +7,13 @@ git clone --depth=1 https://github.com/regro/cf-scripts.git
 
 pushd cf-scripts
 export GIT_FULL_HASH=$(git rev-parse HEAD)
-conda create -n run_env --quiet --file requirements/run
+conda create -n run_env --yes --quiet curl mamba
 conda activate run_env
+for i in `seq 1 10`; do
+  echo $i
+  mamba install --quiet --yes --file requirements/run || echo 'mamba install failed!'
+done
+mamba install --quiet --yes --file requirements/run
 conda config --env --set add_pip_as_python_dependency False
 conda info
 conda config --show-sources
