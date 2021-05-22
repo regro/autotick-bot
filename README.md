@@ -20,4 +20,4 @@ itself on the next round. When stopping the worker, make sure to add `ci skip` t
 
 ## What has the bot done recently?
 
-Check out its [PRs](https://github.com/pulls?utf8=%E2%9C%93&q=is%3Aopen+is%3Apr+author%3Aregro-cf-autotick-bot+archived%3Afalse+) and the [status page](https://conda-forge.org/status/#current_migrations)!
+Check out its [PRs](https://github.com/pulls?utf8=%E2%9C%93&q=is%3Aopen+is%3Apr+author%3Aregro-cf-autotick-bot+archived%3Afalse+), its currently [running jobs](https://github.com/regro/autotick-bot/actions?query=is%3Ain_progress++), and the [status page](https://conda-forge.org/status/#current_migrations)!
