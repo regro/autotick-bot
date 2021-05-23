@@ -2,7 +2,8 @@ name: versions
 
 on:
   schedule:
-    - cron:  '42 * * * *'
+    - cron:  '35 * * * *'
+  workflow_dispatch: null
 
 jobs:
   versions:
