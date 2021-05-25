@@ -12,7 +12,7 @@ jobs:
 
       - name: turnstyle-python
         id: turnstyle
-        uses: beckermr/turnstyle-python@0.7.0
+        uses: beckermr/turnstyle-python@v1
         with:
           continue-after-seconds: 10
           poll-interval-seconds: 5
