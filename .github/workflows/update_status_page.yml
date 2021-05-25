@@ -8,6 +8,14 @@ jobs:
     name: update-status-page
     runs-on: "ubuntu-latest"
     steps:
+      - name: turnstyle-python
+        id: turnstyle
+        uses: beckermr/turnstyle-python@v1
+        with:
+          abort-after-seconds: 10
+          poll-interval-seconds: 5
+          github-token: ${{ secrets.GITHUB_TOKEN }}    
+      
       - uses: actions/checkout@v2
 
       - uses: conda-incubator/setup-miniconda@v2
