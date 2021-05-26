@@ -28,7 +28,7 @@ jobs:
         shell: bash -l {0}
         run: |
           python check_heartbeats.py bot
-          python check_heartbeats.py prs
+          # python check_heartbeats.py prs
 
       - name: trigger bot if needed
         uses: benc-uk/workflow-dispatch@v1
@@ -37,12 +37,12 @@ jobs:
           workflow: bot
           token: ${{ secrets.AUTOTICK_BOT_TOKEN }}
 
-      - name: trigger prs if needed
-        uses: benc-uk/workflow-dispatch@v1
-        if: github.ref == 'refs/heads/master' && ! cancelled() && ! failure() && env.TRIGGER_PRS
-        with:
-          workflow: prs
-          token: ${{ secrets.AUTOTICK_BOT_TOKEN }}
+      # - name: trigger prs if needed
+      #   uses: benc-uk/workflow-dispatch@v1
+      #   if: github.ref == 'refs/heads/master' && ! cancelled() && ! failure() && env.TRIGGER_PRS
+      #   with:
+      #     workflow: prs
+      #     token: ${{ secrets.AUTOTICK_BOT_TOKEN }}
 
       - name: bump on fail
         shell: bash -l {0}
