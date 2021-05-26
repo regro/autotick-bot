@@ -18,7 +18,7 @@ jobs:
         with:
           continue-after-seconds: 10
           poll-interval-seconds: 5
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.AUTOTICK_BOT_TOKEN }}
 
       - uses: conda-incubator/setup-miniconda@v2
         if: success() && ! steps.turnstyle.outputs.force_continued
