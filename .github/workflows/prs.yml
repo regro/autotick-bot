@@ -2,6 +2,8 @@ name: prs
 
 on:
   workflow_dispatch: null
+  schedule:
+    - cron:  '*/5 * * * *'
 
 jobs:
   prs:
@@ -10,7 +12,16 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: turnstyle-python
+        id: turnstyle
+        uses: beckermr/turnstyle-python@v1
+        with:
+          continue-after-seconds: 10
+          poll-interval-seconds: 5
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
       - uses: conda-incubator/setup-miniconda@v2
+        if: success() && ! steps.turnstyle.outputs.force_continued
         with:
           python-version: 3.7
           channels: conda-forge,defaults
@@ -18,20 +29,22 @@ jobs:
           show-channel-urls: true
 
       - name: do local setup and stop me if needed
+        if: success() && ! steps.turnstyle.outputs.force_continued
         shell: bash -l {0}
         run: |
           source local_setup.sh
           python stop_me_if_needed.py
 
-      - name: write heartbeat
-        shell: bash -l {0}
-        run: |
-          python write_heartbeat.py ${ACTION_NAME}
-        env:
-          PASSWORD: ${{ secrets.AUTOTICK_BOT_TOKEN }}
-          ACTION_NAME: ${{ github.workflow }}
+      # - name: write heartbeat
+      #   shell: bash -l {0}
+      #   run: |
+      #     python write_heartbeat.py ${ACTION_NAME}
+      #   env:
+      #     PASSWORD: ${{ secrets.AUTOTICK_BOT_TOKEN }}
+      #     ACTION_NAME: ${{ github.workflow }}
 
       - name: install bot code
+        if: success() && ! steps.turnstyle.outputs.force_continued
         shell: bash -l {0}
         run: |
           source install_bot_code.sh
@@ -39,6 +52,7 @@ jobs:
           PASSWORD: ${{ secrets.AUTOTICK_BOT_TOKEN }}
 
       - name: update prs
+        if: success() && ! steps.turnstyle.outputs.force_continued
         shell: bash -l {0}
         run: |
           pushd cf-graph
@@ -54,8 +68,8 @@ jobs:
           RUN_ID: ${{ github.run_id }}
 
       - name: deploy
+        if: github.ref == 'refs/heads/master' && ! cancelled() && ! steps.turnstyle.outputs.force_continued
         shell: bash -l {0}
-        if: github.ref == 'refs/heads/master' && ! cancelled()
         run: |
           pushd cf-graph
           conda activate run_env
@@ -69,23 +83,23 @@ jobs:
           PASSWORD: ${{ secrets.AUTOTICK_BOT_TOKEN }}
           RUN_ID: ${{ github.run_id }}
 
-      - name: trigger next job
-        uses: benc-uk/workflow-dispatch@v1
-        if: github.ref == 'refs/heads/master' && ! cancelled() && ! failure()
-        with:
-          workflow: prs
-          token: ${{ secrets.AUTOTICK_BOT_TOKEN }}
+      # - name: trigger next job
+      #   uses: benc-uk/workflow-dispatch@v1
+      #   if: github.ref == 'refs/heads/master' && ! cancelled() && ! failure()
+      #   with:
+      #     workflow: prs
+      #     token: ${{ secrets.AUTOTICK_BOT_TOKEN }}
 
       - name: trigger status page
         uses: benc-uk/workflow-dispatch@v1
-        if: github.ref == 'refs/heads/master' && ! cancelled() && ! failure()
+        if: github.ref == 'refs/heads/master' && ! cancelled() && ! failure() && ! steps.turnstyle.outputs.force_continued
         with:
           workflow: update-status-page
           token: ${{ secrets.AUTOTICK_BOT_TOKEN }}
 
       - name: bump on fail
         shell: bash -l {0}
-        if: github.ref == 'refs/heads/master' && failure()
+        if: github.ref == 'refs/heads/master' && failure() && ! steps.turnstyle.outputs.force_continued
         run: |
           export ACTION_URL="https://github.com/regro/autotick-bot/actions/runs/${RUN_ID}"
           python bump_bot_team.py
