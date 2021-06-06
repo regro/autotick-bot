@@ -1,6 +1,5 @@
 # autotick-bot
 [![update-status-page](https://github.com/regro/autotick-bot/workflows/update-status-page/badge.svg)](https://github.com/regro/autotick-bot/actions?query=workflow%3Aupdate-status-page)
-[![audit](https://github.com/regro/autotick-bot/workflows/audit/badge.svg)](https://github.com/regro/autotick-bot/actions?query=workflow%3Aaudit)
 [![pypi-mapping](https://github.com/regro/autotick-bot/workflows/pypi-mapping/badge.svg)](https://github.com/regro/autotick-bot/actions?query=workflow%3Apypi-mapping)
 [![versions](https://github.com/regro/autotick-bot/workflows/versions/badge.svg)](https://github.com/regro/autotick-bot/actions?query=workflow%3Aversions)
 [![prs](https://github.com/regro/autotick-bot/workflows/prs/badge.svg)](https://github.com/regro/autotick-bot/actions?query=workflow%3Aprs)
