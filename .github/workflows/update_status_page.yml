@@ -16,8 +16,8 @@ jobs:
         with:
           continue-after-seconds: 10
           poll-interval-seconds: 5
-          github-token: ${{ secrets.GITHUB_TOKEN }}    
-      
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
       - uses: conda-incubator/setup-miniconda@v2
         if: success() && ! steps.turnstyle.outputs.force_continued
         with:
@@ -25,6 +25,8 @@ jobs:
           channels: conda-forge,defaults
           channel-priority: strict
           show-channel-urls: true
+          miniforge-version: latest
+          miniforge-variant: Mambaforge
 
       - name: do local setup and stop me if needed
         if: success() && ! steps.turnstyle.outputs.force_continued
