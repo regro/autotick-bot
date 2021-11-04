@@ -12,6 +12,14 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: check filesystem
+        run: |
+          df
+
+      - name: check memory
+        run: |
+          free
+
       - uses: conda-incubator/setup-miniconda@v2
         with:
           python-version: 3.7
