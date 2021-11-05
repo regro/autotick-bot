@@ -2,6 +2,7 @@ name: bot
 
 on:
   workflow_dispatch: null
+  pull_request: null
 
 jobs:
   bot:
