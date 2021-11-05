@@ -8,7 +8,7 @@ jobs:
     name: bot
     runs-on: "ubuntu-latest"
     env:
-      BOT_CLI_ARGS: ""
+      BOT_CLI_ARGS: "blah"
     steps:
       - name: turnstyle-python
         id: turnstyle
