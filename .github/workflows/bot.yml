@@ -14,7 +14,7 @@ jobs:
         id: turnstyle
         uses: beckermr/turnstyle-python@v1
         with:
-          continue-after-seconds: 120
+          continue-after-seconds: 300
           poll-interval-seconds: 10
           github-token: ${{ secrets.AUTOTICK_BOT_TOKEN }}
 
