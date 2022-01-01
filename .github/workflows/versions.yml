@@ -10,6 +10,14 @@ jobs:
     name: versions
     runs-on: "ubuntu-latest"
     steps:
+      - name: turnstyle-python
+        id: turnstyle
+        uses: beckermr/turnstyle-python@v1
+        with:
+          continue-after-seconds: 600
+          poll-interval-seconds: 60
+          github-token: ${{ secrets.AUTOTICK_BOT_TOKEN }}    
+
       - uses: actions/checkout@v2
 
       - uses: conda-incubator/setup-miniconda@v2
