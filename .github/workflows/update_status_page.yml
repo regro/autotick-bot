@@ -14,14 +14,14 @@ jobs:
         id: turnstyle
         uses: beckermr/turnstyle-python@v1
         with:
-          continue-after-seconds: 10
-          poll-interval-seconds: 5
+          continue-after-seconds: 600
+          poll-interval-seconds: 50
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - uses: conda-incubator/setup-miniconda@v2
         if: success() && ! steps.turnstyle.outputs.force_continued
         with:
-          python-version: 3.7
+          python-version: ${{ secrets.PYVER }}
           channels: conda-forge,defaults
           channel-priority: strict
           show-channel-urls: true

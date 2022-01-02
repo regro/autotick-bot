@@ -14,7 +14,7 @@ jobs:
 
       - uses: conda-incubator/setup-miniconda@v2
         with:
-          python-version: 3.8
+          python-version: ${{ secrets.PYVER }}
           channels: conda-forge,defaults
           channel-priority: strict
           show-channel-urls: true
@@ -32,20 +32,6 @@ jobs:
         if: github.ref == 'refs/heads/master' && ! cancelled() && ! failure()
         with:
           workflow: bot
-          token: ${{ secrets.AUTOTICK_BOT_TOKEN }}
-
-      - name: trigger prs
-        uses: benc-uk/workflow-dispatch@v1
-        if: github.ref == 'refs/heads/master' && ! cancelled() && ! failure()
-        with:
-          workflow: prs
-          token: ${{ secrets.AUTOTICK_BOT_TOKEN }}
-
-      - name: trigger status page
-        uses: benc-uk/workflow-dispatch@v1
-        if: github.ref == 'refs/heads/master' && ! cancelled() && ! failure()
-        with:
-          workflow: update-status-page
           token: ${{ secrets.AUTOTICK_BOT_TOKEN }}
 
       - name: bump on fail

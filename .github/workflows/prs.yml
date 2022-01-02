@@ -16,14 +16,14 @@ jobs:
         id: turnstyle
         uses: beckermr/turnstyle-python@v1
         with:
-          continue-after-seconds: 10
-          poll-interval-seconds: 5
+          continue-after-seconds: 600
+          poll-interval-seconds: 60
           github-token: ${{ secrets.AUTOTICK_BOT_TOKEN }}
 
       - uses: conda-incubator/setup-miniconda@v2
         if: success() && ! steps.turnstyle.outputs.force_continued
         with:
-          python-version: 3.7
+          python-version: ${{ secrets.PYVER }}
           channels: conda-forge,defaults
           channel-priority: strict
           show-channel-urls: true
@@ -36,14 +36,6 @@ jobs:
         run: |
           source local_setup.sh
           python stop_me_if_needed.py
-
-      # - name: write heartbeat
-      #   shell: bash -l {0}
-      #   run: |
-      #     python write_heartbeat.py ${ACTION_NAME}
-      #   env:
-      #     PASSWORD: ${{ secrets.AUTOTICK_BOT_TOKEN }}
-      #     ACTION_NAME: ${{ github.workflow }}
 
       - name: install bot code
         if: success() && ! steps.turnstyle.outputs.force_continued

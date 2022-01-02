@@ -2,7 +2,7 @@ name: versions
 
 on:
   schedule:
-    - cron:  '35 * * * *'
+    - cron:  '0,20,40 * * * *'
   workflow_dispatch: null
 
 jobs:
@@ -16,7 +16,7 @@ jobs:
         with:
           continue-after-seconds: 600
           poll-interval-seconds: 60
-          github-token: ${{ secrets.AUTOTICK_BOT_TOKEN }}    
+          github-token: ${{ secrets.AUTOTICK_BOT_TOKEN }}
 
       - uses: actions/checkout@v2
         if: success() && ! steps.turnstyle.outputs.force_continued
@@ -24,7 +24,7 @@ jobs:
       - uses: conda-incubator/setup-miniconda@v2
         if: success() && ! steps.turnstyle.outputs.force_continued
         with:
-          python-version: 3.7
+          python-version: ${{ secrets.PYVER }}
           channels: conda-forge,defaults
           channel-priority: strict
           show-channel-urls: true

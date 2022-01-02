@@ -13,7 +13,7 @@ jobs:
 
       - uses: conda-incubator/setup-miniconda@v2
         with:
-          python-version: 3.7
+          python-version: ${{ secrets.PYVER }}
           channels: conda-forge,defaults
           channel-priority: strict
           show-channel-urls: true
@@ -38,13 +38,6 @@ jobs:
         with:
           workflow: bot
           token: ${{ secrets.AUTOTICK_BOT_TOKEN }}
-
-      # - name: trigger prs if needed
-      #   uses: benc-uk/workflow-dispatch@v1
-      #   if: github.ref == 'refs/heads/master' && ! cancelled() && ! failure() && env.TRIGGER_PRS
-      #   with:
-      #     workflow: prs
-      #     token: ${{ secrets.AUTOTICK_BOT_TOKEN }}
 
       - name: bump on fail
         shell: bash -l {0}
