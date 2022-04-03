@@ -1,5 +1,11 @@
 #!/bin/bash
 
+conda config --set experimental_solver libmamba
+conda deactivate
+mamba install conda-libmamba-solver "conda>=4.12.0" --yes --quiet
+conda activate test
+mamba install conda-libmamba-solver "conda>=4.12.0" --yes --quiet
+
 export START_TIME=$(date +%s)
 export TIMEOUT=7200
 
@@ -14,6 +20,7 @@ for i in `seq 1 10`; do
   mamba install --quiet --yes --file requirements/run || echo 'mamba install failed!'
 done
 mamba install --quiet --yes --file requirements/run
+mamba install conda-libmamba-solver "conda>=4.12.0" --yes --quiet
 conda config --env --set add_pip_as_python_dependency False
 conda info
 conda config --show-sources
