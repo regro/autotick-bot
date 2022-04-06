@@ -39,7 +39,7 @@ jobs:
           python stop_me_if_needed.py
 
       - name: install bot code
-        if: success() && ! steps.turnstyle.outputs.force_continued
+        if: success() && ! steps.turnstyle.outputs.force_continued && ! env.CI_SKIP
         shell: bash -l {0}
         run: |
           source install_bot_code.sh
@@ -47,7 +47,7 @@ jobs:
           PASSWORD: ${{ secrets.AUTOTICK_BOT_TOKEN }}
 
       - name: get versions
-        if: success() && ! steps.turnstyle.outputs.force_continued
+        if: success() && ! steps.turnstyle.outputs.force_continued && ! env.CI_SKIP
         shell: bash -l {0}
         run: |
           pushd cf-graph
@@ -60,7 +60,7 @@ jobs:
 
       - name: deploy
         shell: bash -l {0}
-        if: github.ref == 'refs/heads/master' && ! cancelled() && ! steps.turnstyle.outputs.force_continued
+        if: github.ref == 'refs/heads/master' && ! cancelled() && ! steps.turnstyle.outputs.force_continued && ! env.CI_SKIP
         run: |
           pushd cf-graph
           conda activate run_env
@@ -76,7 +76,7 @@ jobs:
 
       - name: bump on fail
         shell: bash -l {0}
-        if: github.ref == 'refs/heads/master' && failure() && ! steps.turnstyle.outputs.force_continued
+        if: github.ref == 'refs/heads/master' && failure() && ! steps.turnstyle.outputs.force_continued && ! env.CI_SKIP
         run: |
           export ACTION_URL="https://github.com/regro/autotick-bot/actions/runs/${RUN_ID}"
           python bump_bot_team.py
