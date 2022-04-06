@@ -41,12 +41,14 @@ jobs:
           python stop_me_if_needed.py
 
       - name: install bot code
+        if: success() && ! env.CI_SKIP
         run: |
           source install_bot_code.sh
         env:
           PASSWORD: ${{ secrets.AUTOTICK_BOT_TOKEN }}
 
       - name: make graph
+        if: success() && ! env.CI_SKIP
         run: |
           pushd cf-graph
           conda activate run_env
@@ -58,6 +60,7 @@ jobs:
           PASSWORD: ${{ secrets.AUTOTICK_BOT_TOKEN }}
 
       - name: run migrations
+        if: success() && ! env.CI_SKIP
         timeout-minutes: 210
         run: |
           export START_TIME=$(date +%s)
@@ -77,14 +80,14 @@ jobs:
           MEMORY_LIMIT_GB: 7
 
       - name: status of changes
-        if: github.ref == 'refs/heads/master' && always()
+        if: github.ref == 'refs/heads/master' && always() && ! env.CI_SKIP
         run: |
           pushd cf-graph
           git status
           popd
 
       - name: deploy
-        if: github.ref == 'refs/heads/master' && always()
+        if: github.ref == 'refs/heads/master' && always() && ! env.CI_SKIP
         run: |
           pushd cf-graph
           conda activate run_env
@@ -100,14 +103,14 @@ jobs:
 
       - name: trigger next job
         uses: benc-uk/workflow-dispatch@v1
-        if: github.ref == 'refs/heads/master' && ! cancelled() && ! failure()
+        if: github.ref == 'refs/heads/master' && ! cancelled() && ! failure() && ! env.CI_SKIP
         with:
           workflow: bot
           token: ${{ secrets.AUTOTICK_BOT_TOKEN }}
 
       - name: bump on fail
         shell: bash -l {0}
-        if: github.ref == 'refs/heads/master' && failure()
+        if: github.ref == 'refs/heads/master' && failure() && ! env.CI_SKIP
         run: |
           export ACTION_URL="https://github.com/regro/autotick-bot/actions/runs/${RUN_ID}"
           python bump_bot_team.py
