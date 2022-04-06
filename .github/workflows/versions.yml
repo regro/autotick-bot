@@ -9,20 +9,14 @@ jobs:
   versions:
     name: versions
     runs-on: "ubuntu-latest"
+    concurrency: versions
+    defaults:
+      run:
+        shell: bash -l {0}
     steps:
-      - name: turnstyle-python
-        id: turnstyle
-        uses: beckermr/turnstyle-python@v1
-        with:
-          continue-after-seconds: 60
-          poll-interval-seconds: 10
-          github-token: ${{ secrets.AUTOTICK_BOT_TOKEN }}
-
       - uses: actions/checkout@v2
-        if: success() && ! steps.turnstyle.outputs.force_continued
 
       - uses: conda-incubator/setup-miniconda@v2
-        if: success() && ! steps.turnstyle.outputs.force_continued
         with:
           python-version: ${{ secrets.PYVER }}
           channels: conda-forge,defaults
@@ -32,23 +26,19 @@ jobs:
           miniforge-variant: Mambaforge
 
       - name: do local setup and stop me if needed
-        if: success() && ! steps.turnstyle.outputs.force_continued
-        shell: bash -l {0}
         run: |
           source local_setup.sh
           python stop_me_if_needed.py
 
       - name: install bot code
-        if: success() && ! steps.turnstyle.outputs.force_continued
-        shell: bash -l {0}
+        if: success() && ! env.CI_SKIP
         run: |
           source install_bot_code.sh
         env:
           PASSWORD: ${{ secrets.AUTOTICK_BOT_TOKEN }}
 
       - name: get versions
-        if: success() && ! steps.turnstyle.outputs.force_continued
-        shell: bash -l {0}
+        if: success() && ! env.CI_SKIP
         run: |
           pushd cf-graph
           conda activate run_env
@@ -59,8 +49,7 @@ jobs:
           PASSWORD: ${{ secrets.AUTOTICK_BOT_TOKEN }}
 
       - name: deploy
-        shell: bash -l {0}
-        if: github.ref == 'refs/heads/master' && ! cancelled() && ! steps.turnstyle.outputs.force_continued
+        if: github.ref == 'refs/heads/master' && ! cancelled() && ! env.CI_SKIP
         run: |
           pushd cf-graph
           conda activate run_env
@@ -75,8 +64,7 @@ jobs:
           RUN_ID: ${{ github.run_id }}
 
       - name: bump on fail
-        shell: bash -l {0}
-        if: github.ref == 'refs/heads/master' && failure() && ! steps.turnstyle.outputs.force_continued
+        if: github.ref == 'refs/heads/master' && failure() && ! env.CI_SKIP
         run: |
           export ACTION_URL="https://github.com/regro/autotick-bot/actions/runs/${RUN_ID}"
           python bump_bot_team.py

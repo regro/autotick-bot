@@ -2,6 +2,8 @@ name: bot
 
 on:
   workflow_dispatch: null
+  schedule:
+    - cron:  '*/30 * * * *'
 
 jobs:
   bot:
@@ -9,30 +11,22 @@ jobs:
     runs-on: "ubuntu-latest"
     env:
       BOT_CLI_ARGS: ""
+    concurrency: bot
+    defaults:
+      run:
+        shell: bash -l {0}
     steps:
-      - name: turnstyle-python
-        id: turnstyle
-        uses: beckermr/turnstyle-python@v1
-        with:
-          continue-after-seconds: 600
-          poll-interval-seconds: 60
-          github-token: ${{ secrets.AUTOTICK_BOT_TOKEN }}
-
       - uses: actions/checkout@v2
-        if: success() && ! steps.turnstyle.outputs.force_continued
 
       - name: check filesystem
-        if: success() && ! steps.turnstyle.outputs.force_continued
         run: |
           df
 
       - name: check memory
-        if: success() && ! steps.turnstyle.outputs.force_continued
         run: |
           free
 
       - uses: conda-incubator/setup-miniconda@v2
-        if: success() && ! steps.turnstyle.outputs.force_continued
         with:
           python-version: ${{ secrets.PYVER }}
           channels: conda-forge,defaults
@@ -42,32 +36,17 @@ jobs:
           miniforge-variant: Mambaforge
 
       - name: do local setup and stop me if needed
-        if: success() && ! steps.turnstyle.outputs.force_continued
-        shell: bash -l {0}
         run: |
           source local_setup.sh
           python stop_me_if_needed.py
 
-      - name: write heartbeat
-        if: success() && ! steps.turnstyle.outputs.force_continued
-        shell: bash -l {0}
-        run: |
-          python write_heartbeat.py ${ACTION_NAME}
-        env:
-          PASSWORD: ${{ secrets.AUTOTICK_BOT_TOKEN }}
-          ACTION_NAME: ${{ github.workflow }}
-
       - name: install bot code
-        if: success() && ! steps.turnstyle.outputs.force_continued
-        shell: bash -l {0}
         run: |
           source install_bot_code.sh
         env:
           PASSWORD: ${{ secrets.AUTOTICK_BOT_TOKEN }}
 
       - name: make graph
-        if: success() && ! steps.turnstyle.outputs.force_continued
-        shell: bash -l {0}
         run: |
           pushd cf-graph
           conda activate run_env
@@ -79,8 +58,6 @@ jobs:
           PASSWORD: ${{ secrets.AUTOTICK_BOT_TOKEN }}
 
       - name: run migrations
-        if: success() && ! steps.turnstyle.outputs.force_continued
-        shell: bash -l {0}
         timeout-minutes: 210
         run: |
           export START_TIME=$(date +%s)
@@ -100,16 +77,14 @@ jobs:
           MEMORY_LIMIT_GB: 7
 
       - name: status of changes
-        shell: bash -l {0}
-        if: github.ref == 'refs/heads/master' && always() && ! steps.turnstyle.outputs.force_continued
+        if: github.ref == 'refs/heads/master' && always()
         run: |
           pushd cf-graph
           git status
           popd
 
       - name: deploy
-        shell: bash -l {0}
-        if: github.ref == 'refs/heads/master' && always() && ! steps.turnstyle.outputs.force_continued
+        if: github.ref == 'refs/heads/master' && always()
         run: |
           pushd cf-graph
           conda activate run_env
@@ -125,14 +100,14 @@ jobs:
 
       - name: trigger next job
         uses: benc-uk/workflow-dispatch@v1
-        if: github.ref == 'refs/heads/master' && ! cancelled() && ! failure() && ! steps.turnstyle.outputs.force_continued
+        if: github.ref == 'refs/heads/master' && ! cancelled() && ! failure()
         with:
           workflow: bot
           token: ${{ secrets.AUTOTICK_BOT_TOKEN }}
 
       - name: bump on fail
         shell: bash -l {0}
-        if: github.ref == 'refs/heads/master' && failure() && ! steps.turnstyle.outputs.force_continued
+        if: github.ref == 'refs/heads/master' && failure()
         run: |
           export ACTION_URL="https://github.com/regro/autotick-bot/actions/runs/${RUN_ID}"
           python bump_bot_team.py
