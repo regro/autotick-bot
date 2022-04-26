@@ -26,6 +26,7 @@ jobs:
           import sys
           import requests
           import datetime
+          import time
           
           gh = github.Github(os.environ['GITHUB_TOKEN'])
           r = gh.get_repo('regro/autotick-bot')
@@ -41,6 +42,7 @@ jobs:
                               headers={'Authorization': 'Bearer ' + os.environ['GITHUB_TOKEN']},
                           )
                           done += 1
+                          time.sleep(2)
                       if done == 2000:
                           sys.exit(0)
           " > del_old_runs.py
