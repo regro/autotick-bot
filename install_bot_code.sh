@@ -1,10 +1,10 @@
 #!/bin/bash
 
-conda config --set experimental_solver libmamba
-conda deactivate
-mamba install conda-libmamba-solver "conda>=4.12.0" --yes --quiet
-conda activate test
-mamba install conda-libmamba-solver "conda>=4.12.0" --yes --quiet
+# conda config --set experimental_solver libmamba
+# conda deactivate
+# mamba install conda-libmamba-solver "conda>=4.12.0" --yes --quiet
+# conda activate test
+# mamba install conda-libmamba-solver "conda>=4.12.0" --yes --quiet
 
 export START_TIME=$(date +%s)
 export TIMEOUT=7200
