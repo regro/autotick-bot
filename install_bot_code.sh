@@ -13,7 +13,7 @@ git clone --depth=1 https://github.com/regro/cf-scripts.git
 
 pushd cf-scripts
 export GIT_FULL_HASH=$(git rev-parse HEAD)
-mamba create -n run_env --yes --quiet curl
+mamba create -n run_env --yes --quiet curl python=3.9
 conda activate run_env
 for i in `seq 1 10`; do
   echo $i
