@@ -46,7 +46,7 @@ jobs:
 
           export CIRCLE_BUILD_URL="https://github.com/regro/autotick-bot/actions/runs/${RUN_ID}"
           export CIRCLE_BUILD_NUM="actually-actions-${RUN_ID}"
-          conda-forge-tick --run 6
+          conda-forge-tick2 update-prs
           popd
         env:
           USERNAME: regro-cf-autotick-bot
@@ -61,7 +61,7 @@ jobs:
 
           export CIRCLE_BUILD_URL="https://github.com/regro/autotick-bot/actions/runs/${RUN_ID}"
           export CIRCLE_BUILD_NUM="actually-actions-${RUN_ID}"
-          conda-forge-tick --run -1
+          conda-forge-tick2 deploy
 
           popd
         env:

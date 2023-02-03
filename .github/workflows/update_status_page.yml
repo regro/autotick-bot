@@ -41,7 +41,7 @@ jobs:
           pushd cf-graph
           conda activate run_env
 
-          conda-forge-tick --run 4
+          conda-forge-tick2 status-report
           popd
         env:
           PASSWORD: ${{ secrets.AUTOTICK_BOT_TOKEN }}
@@ -54,7 +54,7 @@ jobs:
 
           export CIRCLE_BUILD_URL="https://github.com/regro/autotick-bot/actions/runs/${RUN_ID}"
           export CIRCLE_BUILD_NUM="actually-actions-${RUN_ID}"
-          conda-forge-tick --run -1
+          conda-forge-tick2 deploy
 
           popd
         env:

@@ -2,6 +2,9 @@ name: keepalive
 on:
   schedule:
     - cron: "0 0 * * *"
+# the keepalive-workflow is a GitHub action to prevent GitHub from suspending
+# your cronjob based triggers due to repository inactivity
+
 
 jobs:
   cronjob-based-github-action:
