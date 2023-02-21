@@ -1,4 +1,7 @@
-# autotick-bot
+# **INACTIVE**: The CI jobs in this repo have been moved to `regro/cf-scripts`.
+
+
+## autotick-bot
 [![update-status-page](https://github.com/regro/autotick-bot/workflows/update-status-page/badge.svg)](https://github.com/regro/autotick-bot/actions?query=workflow%3Aupdate-status-page)
 [![pypi-mapping](https://github.com/regro/autotick-bot/workflows/pypi-mapping/badge.svg)](https://github.com/regro/autotick-bot/actions?query=workflow%3Apypi-mapping)
 [![versions](https://github.com/regro/autotick-bot/workflows/versions/badge.svg)](https://github.com/regro/autotick-bot/actions?query=workflow%3Aversions)
