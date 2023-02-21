@@ -2,8 +2,8 @@ name: bot
 
 on:
   workflow_dispatch: null
-  schedule:
-    - cron:  '*/30 * * * *'
+#   schedule:
+#     - cron:  '*/30 * * * *'
 
 jobs:
   bot:
